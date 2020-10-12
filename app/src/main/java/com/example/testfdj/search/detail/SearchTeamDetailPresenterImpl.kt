@@ -1,7 +1,7 @@
 package com.example.testfdj.search.detail
 
-import com.example.testfdj.injection.search.DaggerSearchComponent
 import com.example.testfdj.search.data.SearchRepository
+import com.example.testfdj.search.injection.DaggerSearchComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
