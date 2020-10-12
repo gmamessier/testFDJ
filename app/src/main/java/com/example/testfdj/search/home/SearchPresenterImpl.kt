@@ -9,7 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SearchPresenter(private val view: ISearchView) {
+class SearchPresenterImpl(private val view: ISearchView): ISearchPresenter {
 
     @Inject
     lateinit var searchRepository: SearchRepository
@@ -22,7 +22,7 @@ class SearchPresenter(private val view: ISearchView) {
         DaggerSearchComponent.create().inject(this)
     }
 
-    fun getAllLeagues() {
+    override fun getAllLeagues() {
         scope.launch{
             val listOfLeagues = if (::searchRepository.isInitialized) searchRepository.getAllLeagues() else null
             listOfLeagues?.let { list ->
@@ -34,7 +34,7 @@ class SearchPresenter(private val view: ISearchView) {
         }
     }
 
-    fun onQueryTextChange(searchText: String) {
+    override fun onQueryTextChange(searchText: String) {
         if (::leagues.isInitialized && leagues.isNotEmpty() && searchText.length >= 3) {
             view.onQueryTextChange(leagues.filter {
                     league -> (league.alternateName != null && league.alternateName.contains(searchText, ignoreCase = true)) || league.name.contains(searchText, ignoreCase = true)
@@ -44,7 +44,7 @@ class SearchPresenter(private val view: ISearchView) {
         }
     }
 
-    fun onLeagueChosen(chosenLeague: String) {
+    override fun onLeagueChosen(chosenLeague: String) {
         view.hideLeagueList()
 
         scope.launch {
@@ -57,11 +57,11 @@ class SearchPresenter(private val view: ISearchView) {
         }
     }
 
-    fun onTeamChosen(chosenTeam: String) {
+    override fun onTeamChosen(chosenTeam: String) {
         view.showTeamDetail(chosenTeam)
     }
 
-    fun setLeagues(newLeagues: List<League>) {
+    override fun setLeagues(newLeagues: List<League>) {
         leagues = newLeagues
     }
 }

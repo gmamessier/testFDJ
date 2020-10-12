@@ -11,7 +11,8 @@ import com.example.testfdj.search.model.Team
 import kotlinx.android.synthetic.main.fragment_search_team_detail.*
 
 class SearchTeamDetailFragment : Fragment(), ISearchTeamDetailView {
-    private val presenter = SearchTeamDetailPresenter(this)
+
+    lateinit var presenter: ISearchTeamDetailPresenter
 
     companion object {
         private const val CHOSEN_TEAM = "CHOSEN_TEAM"
@@ -35,7 +36,7 @@ class SearchTeamDetailFragment : Fragment(), ISearchTeamDetailView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        presenter = SearchTeamDetailPresenterImpl(this)
         arguments?.getString(CHOSEN_TEAM)?.let { chosenTeam ->
             title.text = chosenTeam
             presenter.getTeamDetailed(chosenTeam)

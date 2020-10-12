@@ -2,12 +2,12 @@ package com.example.testfdj.search.home
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import com.example.testfdj.R
 import com.example.testfdj.search.SearchActivity
 import com.example.testfdj.search.home.adapter.LeaguesListAdapter
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : Fragment(), ISearchView {
 
-    private val presenter = SearchPresenter(this)
+    private lateinit var presenter: ISearchPresenter
     private lateinit var leaguesListAdapter: LeaguesListAdapter
     private lateinit var teamsListAdapter: TeamsListAdapter
 
@@ -36,6 +36,7 @@ class SearchFragment : Fragment(), ISearchView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenter = SearchPresenterImpl(this)
         getAllLeagues()
         initSearchView()
     }

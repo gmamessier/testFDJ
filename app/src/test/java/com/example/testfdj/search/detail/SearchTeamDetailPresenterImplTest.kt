@@ -20,16 +20,16 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 @ExperimentalCoroutinesApi
-class SearchTeamDetailPresenterTest {
+class SearchTeamDetailPresenterImplTest {
 
     private val teamsSuccess = listOf(Team(0, "", "", "", "", "", ""))
     private val teamsError = null
     private lateinit var listOfTeams: Teams
-    private lateinit var searchTeamDetailPresenter: SearchTeamDetailPresenter
+    private lateinit var searchTeamDetailPresenterImpl: SearchTeamDetailPresenterImpl
     private val dispatcher = TestCoroutineDispatcher()
 
     @Mock
-    private lateinit var searchRepository: SearchRepository
+    private lateinit var searchRepo: SearchRepository
 
     @Mock
     private lateinit var view: ISearchTeamDetailView
@@ -37,6 +37,9 @@ class SearchTeamDetailPresenterTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
+        searchTeamDetailPresenterImpl = SearchTeamDetailPresenterImpl(view).apply {
+            searchRepository = searchRepo
+        }
     }
 
     @After
@@ -46,26 +49,22 @@ class SearchTeamDetailPresenterTest {
 
     @Test
     fun getTeamDetailedSuccess() {
-        searchTeamDetailPresenter = SearchTeamDetailPresenter(view)
-        searchTeamDetailPresenter.searchRepository = searchRepository
         listOfTeams = Teams(teamsSuccess)
 
         dispatcher.runBlockingTest {
-            `when`(searchRepository.getTeamDetailsByName("Paris SG")).thenReturn(listOfTeams)
-            searchTeamDetailPresenter.getTeamDetailed("Paris SG")
+            `when`(searchRepo.getTeamDetailsByName("Paris SG")).thenReturn(listOfTeams)
+            searchTeamDetailPresenterImpl.getTeamDetailed("Paris SG")
             verify(view, times(1)).displayTeamDetails(teamsSuccess[0])
         }
     }
 
     @Test
     fun getTeamDetailedFailed() {
-        searchTeamDetailPresenter = SearchTeamDetailPresenter(view)
-        searchTeamDetailPresenter.searchRepository = searchRepository
         listOfTeams = Teams(teamsError)
 
         dispatcher.runBlockingTest {
-            `when`(searchRepository.getTeamDetailsByName("Par")).thenReturn(listOfTeams)
-            searchTeamDetailPresenter.getTeamDetailed("Par")
+            `when`(searchRepo.getTeamDetailsByName("Par")).thenReturn(listOfTeams)
+            searchTeamDetailPresenterImpl.getTeamDetailed("Par")
             verify(view, times(0)).displayTeamDetails(teamsSuccess[0])
         }
     }

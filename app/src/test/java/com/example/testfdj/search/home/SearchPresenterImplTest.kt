@@ -32,11 +32,11 @@ class SearchPresenterTest {
     private val teamsError = null
     private lateinit var listOfTeams: Teams
 
-    private lateinit var searchPresenter: SearchPresenter
+    private lateinit var searchPresenter: ISearchPresenter
     private val dispatcher = TestCoroutineDispatcher()
 
     @Mock
-    private lateinit var searchRepository: SearchRepository
+    private lateinit var searchRepo: SearchRepository
 
     @Mock
     private lateinit var view: ISearchView
@@ -44,6 +44,9 @@ class SearchPresenterTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(dispatcher)
+        searchPresenter = SearchPresenterImpl(view).apply {
+            searchRepository = searchRepo
+        }
     }
 
     @After
@@ -53,12 +56,10 @@ class SearchPresenterTest {
 
     @Test
     fun getAllLeaguesSuccess() {
-        searchPresenter = SearchPresenter(view)
-        searchPresenter.searchRepository = searchRepository
         listOfLeagues = Leagues(leaguesSuccess)
 
         dispatcher.runBlockingTest {
-            `when`(searchRepository.getAllLeagues()).thenReturn(listOfLeagues)
+            `when`(searchRepo.getAllLeagues()).thenReturn(listOfLeagues)
             searchPresenter.getAllLeagues()
             verify(view, times(1)).initLeaguesListAdapter(leaguesSuccess)
         }
@@ -66,12 +67,10 @@ class SearchPresenterTest {
 
     @Test
     fun getAllLeaguesError() {
-        searchPresenter = SearchPresenter(view)
-        searchPresenter.searchRepository = searchRepository
         listOfLeagues = Leagues(leaguesSuccess)
 
         dispatcher.runBlockingTest {
-            `when`(searchRepository.getAllLeagues()).thenReturn(null)
+            `when`(searchRepo.getAllLeagues()).thenReturn(null)
             searchPresenter.getAllLeagues()
             verify(view, times(0)).initLeaguesListAdapter(leaguesSuccess)
         }
@@ -79,12 +78,10 @@ class SearchPresenterTest {
 
     @Test
     fun getAllLeaguesNoLeagues() {
-        searchPresenter = SearchPresenter(view)
-        searchPresenter.searchRepository = searchRepository
         listOfLeagues = Leagues(leaguesError)
 
         dispatcher.runBlockingTest {
-            `when`(searchRepository.getAllLeagues()).thenReturn(listOfLeagues)
+            `when`(searchRepo.getAllLeagues()).thenReturn(listOfLeagues)
             searchPresenter.getAllLeagues()
             verify(view, times(0)).initLeaguesListAdapter(leaguesSuccess)
         }
@@ -92,12 +89,10 @@ class SearchPresenterTest {
 
     @Test
     fun onLeagueChosenSuccess() {
-        searchPresenter = SearchPresenter(view)
-        searchPresenter.searchRepository = searchRepository
         listOfTeams = Teams(teamsSuccess)
 
         dispatcher.runBlockingTest {
-            `when`(searchRepository.getLeagueTeamsByName("French Ligue 1")).thenReturn(listOfTeams)
+            `when`(searchRepo.getLeagueTeamsByName("French Ligue 1")).thenReturn(listOfTeams)
             searchPresenter.onLeagueChosen("French Ligue 1")
             verify(view, times(1)).initTeamsListAdapter(teamsSuccess)
         }
@@ -105,12 +100,10 @@ class SearchPresenterTest {
 
     @Test
     fun onLeagueChosenNoTeams() {
-        searchPresenter = SearchPresenter(view)
-        searchPresenter.searchRepository = searchRepository
         listOfTeams = Teams(teamsError)
 
         dispatcher.runBlockingTest {
-            `when`(searchRepository.getLeagueTeamsByName("F")).thenReturn(listOfTeams)
+            `when`(searchRepo.getLeagueTeamsByName("F")).thenReturn(listOfTeams)
             searchPresenter.onLeagueChosen("F")
             verify(view, times(0)).initTeamsListAdapter(teamsSuccess)
         }
@@ -118,7 +111,6 @@ class SearchPresenterTest {
 
     @Test
     fun onQueryTextChangeLeaguesFound() {
-        searchPresenter = SearchPresenter(view)
         searchPresenter.setLeagues(leaguesSuccess)
 
         searchPresenter.onQueryTextChange("ligue")
@@ -127,7 +119,6 @@ class SearchPresenterTest {
 
     @Test
     fun onQueryTextChangeNoLeaguesFound() {
-        searchPresenter = SearchPresenter(view)
         searchPresenter.setLeagues(leaguesSuccess)
 
         searchPresenter.onQueryTextChange("liga")
@@ -136,7 +127,6 @@ class SearchPresenterTest {
 
     @Test
     fun onQueryTextChangeHide() {
-        searchPresenter = SearchPresenter(view)
         searchPresenter.setLeagues(leaguesSuccess)
 
         searchPresenter.onQueryTextChange("li")
