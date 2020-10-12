@@ -23,6 +23,8 @@ Search -> package global, pourrait être un module sur un projet professionnel, 
    - home
    - detail
  
+ L'auto complétion a été basée sur le name et sur l'alternate name pour laissée plus de possibilités à l'utilisateur
+ 
  # Les tests
  J'ai créé plusieurs tests sur les presenters pour tester le bon fonctionnement de transmissions des informations. 
  Tous les cas n'ont pas été testés volontairement pour des questions de timing. Les tests ont été créés à posteriori, une autre méthode comme de la TDD peut être envisagée.
@@ -33,4 +35,6 @@ Search -> package global, pourrait être un module sur un projet professionnel, 
  Toujours pour des questions de timing, je n'ai aucun élément graphique au cas où les informations sont mal récupérées ou si elles sont vides
  
  # Screenshots
- 
+ ![Alt Text](pictures/auto_completion.PNG)
+ ![Alt Text](pictures/teams.PNG)
+ ![Alt Text](pictures/detail.PNG)
