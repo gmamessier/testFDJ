@@ -1,4 +1,4 @@
-package com.example.testfdj.injection.search
+package com.example.testfdj.search.injection
 
 import com.example.testfdj.search.data.SearchApi
 import dagger.Module
@@ -14,7 +14,7 @@ class NetworkModule {
     @Provides
     fun provideRetrofitService(): SearchApi {
         return Retrofit.Builder()
-            .baseUrl("https://www.thesportsdb.com/api/v1/json/1/")
+            .baseUrl("https://www.thesportsdb.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(SearchApi::class.java)

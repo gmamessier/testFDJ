@@ -6,12 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface SearchApi {
-    @GET("all_leagues.php")
+    @GET("api/v1/json/1/all_leagues.php")
     suspend fun getAllLeagues(): Leagues?
 
-    @GET("search_all_teams.php")
+    @GET("api/v1/json/1/search_all_teams.php")
     suspend fun getLeagueTeamsByName(@Query("l") leagueName: String): Teams?
 
-    @GET("searchteams.php")
+    @GET("api/v1/json/1/searchteams.php")
     suspend fun getTeamDetailsByName(@Query("t") teamName: String): Teams?
 }
