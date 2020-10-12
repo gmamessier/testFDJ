@@ -36,5 +36,5 @@ Search -> package global, pourrait être un module sur un projet professionnel, 
  
  # Screenshots
  ![Alt Text](pictures/auto_completion.PNG)
- ![Alt Text](pictures/teams.PNG)
+ ![Alt Text](pictures/teams.png)
  ![Alt Text](pictures/detail.PNG)
